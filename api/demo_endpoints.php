@@ -14,13 +14,21 @@ try {
     $endpoint = $_GET['endpoint'] ?? '';
     $method = $_SERVER['REQUEST_METHOD'];
     
+    // Check for no_token flag for testing 401 responses
+    $noToken = isset($_GET['no_token']) && $_GET['no_token'] === 'true';
+    
+    // Debug logging
+    error_log("Endpoint: " . $endpoint);
+    error_log("No token flag: " . ($noToken ? 'true' : 'false'));
+    error_log("GET params: " . json_encode($_GET));
+    
     // Authenticate user (optional for some endpoints to test 401)
     $session = null;
     $currentUserId = null;
     $currentUserRole = null;
     
     // For endpoints that require authentication
-    if ($endpoint !== 'public') {
+    if ($endpoint !== 'public' && !$noToken) {
         try {
             $session = authenticateUser($pdo);
             $currentUserId = $session['user_id'];
@@ -29,6 +37,10 @@ try {
             // Return 401 for endpoints that require auth
             sendJson(['error' => 'Authentication required', 'endpoint' => $endpoint], 401);
         }
+    } elseif ($endpoint !== 'public' && $noToken) {
+        // no_token=true: skip authentication to trigger 401
+        error_log("Returning 401 for no_token request");
+        sendJson(['error' => 'Authentication required - NO TOKEN', 'endpoint' => $endpoint, 'debug' => 'no_token flag used'], 401);
     }
     
     switch ($endpoint) {
