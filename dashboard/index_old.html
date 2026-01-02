@@ -1,0 +1,1333 @@
+<!DOCTYPE html>
+<html lang="en">
+    <style>
+        :root {
+            --primary-color: #2563eb;
+            --primary-dark: #1d4ed8;
+            --primary-light: #3b82f6;
+            --secondary-color: #64748b;
+            --success-color: #10b981;
+            --warning-color: #f59e0b;
+            --danger-color: #ef4444;
+            --info-color: #06b6d4;
+            --light-bg: #f8fafc;
+            --white: #ffffff;
+            --text-primary: #1e293b;
+            --text-secondary: #64748b;
+            --border-color: #e2e8f0;
+            --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+            --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+            --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+            --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1);
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            color: var(--text-primary);
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+        }
+
+        /* Modern color scheme */
+        .bg-primary, .bg-info, .bg-secondary {
+            background-color: var(--primary-color) !important;
+            color: var(--white) !important;
+        }
+        
+        .badge.bg-primary, .badge.bg-info, .badge.bg-secondary {
+            background-color: var(--primary-light) !important;
+            color: var(--white) !important;
+        }
+        
+        .btn-primary, .btn-info, .btn-secondary {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%) !important;
+            border: none !important;
+            color: var(--white) !important;
+            font-weight: 600;
+            padding: 10px 20px;
+            border-radius: 8px;
+            box-shadow: var(--shadow-md);
+            transition: var(--transition);
+        }
+        
+        .btn-primary:hover, .btn-info:hover, .btn-secondary:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+            background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary-color) 100%) !important;
+        }
+        
+        .card-header.text-white {
+            color: var(--text-primary) !important;
+        }
+
+        /* Enhanced sidebar */
+        .sidebar {
+            min-height: 100vh;
+            background: linear-gradient(180deg, var(--white) 0%, var(--light-bg) 100%);
+            padding: 30px 20px;
+            border-right: 1px solid var(--border-color);
+            box-shadow: var(--shadow-md);
+            position: relative;
+        }
+        
+        .sidebar::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary-color) 0%, var(--info-color) 100%);
+        }
+        
+        .sidebar .nav-link {
+            color: var(--text-primary);
+            padding: 14px 20px;
+            margin: 8px 0;
+            border-radius: 12px;
+            transition: var(--transition);
+            font-weight: 500;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .sidebar .nav-link::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 3px;
+            background: var(--primary-color);
+            transform: translateX(-100%);
+            transition: var(--transition);
+        }
+        
+        .sidebar .nav-link:hover {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-light) 100%);
+            color: var(--white);
+            transform: translateX(5px);
+            box-shadow: var(--shadow-md);
+        }
+        
+        .sidebar .nav-link:hover::before {
+            transform: translateX(0);
+        }
+        
+        .sidebar .nav-link.active {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
+            color: var(--white);
+            font-weight: 600;
+            box-shadow: var(--shadow-lg);
+        }
+        
+        .sidebar .nav-link i {
+            margin-right: 12px;
+            font-size: 16px;
+        }
+
+        .main-content {
+            padding: 30px;
+            background-color: var(--white);
+            min-height: 100vh;
+        }
+        
+        .page-section { 
+            display: none; 
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        
+        .page-section.active { 
+            display: block; 
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Enhanced cards */
+        .api-test-card {
+            margin-bottom: 24px;
+            border: none;
+            border-radius: 16px;
+            box-shadow: var(--shadow-md);
+            transition: var(--transition);
+            overflow: hidden;
+            background: var(--white);
+        }
+        
+        .api-test-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-xl);
+        }
+
+        .api-test-card .card-header {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
+            color: var(--white) !important;
+            padding: 16px 20px;
+            font-weight: 600;
+            font-size: 15px;
+            border: none;
+            position: relative;
+        }
+        
+        .api-test-card .card-header::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--info-color) 0%, var(--success-color) 100%);
+        }
+        
+        .api-test-card .card-header .badge {
+            display: none;
+        }
+        
+        .api-test-card .btn {
+            background: linear-gradient(135deg, var(--success-color) 0%, #059669 100%);
+            border: none;
+            color: var(--white);
+            font-weight: 600;
+            padding: 12px 24px;
+            border-radius: 10px;
+            transition: var(--transition);
+            box-shadow: var(--shadow-sm);
+        }
+        
+        .api-test-card .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+            background: linear-gradient(135deg, #059669 0%, var(--success-color) 100%);
+        }
+
+        /* Enhanced response area */
+        .api-response {
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+            border: 1px solid #334155;
+            border-radius: 12px;
+            padding: 20px;
+            color: #e2e8f0;
+            font-family: 'JetBrains Mono', 'Fira Code', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+            font-size: 14px;
+            margin-top: 16px;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .api-response::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, var(--primary-color) 0%, var(--info-color) 50%, var(--success-color) 100%);
+        }
+        
+        .api-response pre {
+            margin: 0;
+            color: #e2e8f0;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            line-height: 1.5;
+        }
+        
+        .api-response .status-badge {
+            display: inline-block;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 12px;
+            margin-bottom: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .api-response .status-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid #334155;
+        }
+        
+        .status-200 { 
+            background: linear-gradient(135deg, var(--success-color) 0%, #059669 100%);
+            color: var(--white); 
+            font-weight: 600;
+            box-shadow: 0 2px 4px rgba(16, 185, 129, 0.3);
+        }
+        
+        .status-401 { 
+            background: linear-gradient(135deg, var(--danger-color) 0%, #dc2626 100%);
+            color: var(--white); 
+            font-weight: 600;
+            box-shadow: 0 2px 4px rgba(239, 68, 68, 0.3);
+        }
+        
+        .status-403 { 
+            background: linear-gradient(135deg, var(--warning-color) 0%, #d97706 100%);
+            color: var(--white); 
+            font-weight: 600;
+            box-shadow: 0 2px 4px rgba(245, 158, 11, 0.3);
+        }
+        
+        .status-404 { 
+            background: linear-gradient(135deg, var(--secondary-color) 0%, #475569 100%);
+            color: var(--white); 
+            font-weight: 600;
+            box-shadow: 0 2px 4px rgba(100, 116, 139, 0.3);
+        }
+        
+        .status-500 { 
+            background: linear-gradient(135deg, var(--danger-color) 0%, #dc2626 100%);
+            color: var(--white); 
+            font-weight: 600;
+            box-shadow: 0 2px 4px rgba(239, 68, 68, 0.3);
+        }
+
+        /* Enhanced user info */
+        .user-info {
+            background: linear-gradient(135deg, var(--white) 0%, var(--light-bg) 100%);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 30px;
+            box-shadow: var(--shadow-md);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .user-info::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary-color) 0%, var(--info-color) 50%, var(--success-color) 100%);
+        }
+        
+        .form-switch {
+            margin-bottom: 12px;
+        }
+        
+        .table-responsive {
+            margin-top: 24px;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: var(--shadow-md);
+        }
+        
+        .table-responsive table {
+            margin: 0;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+        
+        .table-responsive thead {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
+            color: var(--white);
+        }
+        
+        .table-responsive th {
+            border: none;
+            padding: 16px;
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 12px;
+            letter-spacing: 0.5px;
+        }
+        
+        .table-responsive td {
+            border: none;
+            padding: 16px;
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .table-responsive tbody tr:hover {
+            background-color: var(--light-bg);
+        }
+        
+        .login-container {
+            max-width: 450px;
+            margin: 120px auto;
+        }
+        
+        .login-card {
+            border: none;
+            border-radius: 20px;
+            box-shadow: var(--shadow-xl);
+            overflow: hidden;
+            background: var(--white);
+        }
+        
+        .login-card .card-header {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
+            color: var(--white);
+            padding: 30px;
+            border: none;
+            text-align: center;
+        }
+        
+        .login-card .card-body {
+            padding: 40px 30px;
+        }
+        
+        .login-card .form-control {
+            border: 2px solid var(--border-color);
+            border-radius: 10px;
+            padding: 12px 16px;
+            font-size: 15px;
+            transition: var(--transition);
+        }
+        
+        .login-card .form-control:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+        
+        .login-card .btn-primary {
+            width: 100%;
+            padding: 14px;
+            font-size: 16px;
+            margin-top: 10px;
+        }
+        
+        /* Page titles */
+        .page-title {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+            position: relative;
+            padding-bottom: 16px;
+        }
+        
+        .page-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 60px;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary-color) 0%, var(--info-color) 100%);
+            border-radius: 2px;
+        }
+        
+        /* Responsive improvements */
+        @media (max-width: 768px) {
+            .sidebar {
+                padding: 20px 15px;
+            }
+            
+            .main-content {
+                padding: 20px 15px;
+            }
+            
+            .login-container {
+                margin: 60px 15px;
+                max-width: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Login Page -->
+    <div id="loginPage" class="page-section active">
+        <div class="container">
+            <div class="login-container">
+                <div class="card login-card">
+                    <div class="card-header bg-primary text-white">
+                        <h4 class="mb-0"><i class="fas fa-hospital"></i> Hospital RBAC Dashboard</h4>
+                    </div>
+                    <div class="card-body">
+                        <form id="loginForm">
+                            <div class="mb-3">
+                                <label for="email" class="form-label">Email</label>
+                                <input type="email" class="form-control" id="email" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="password" class="form-label">Password</label>
+                                <input type="password" class="form-control" id="password" required>
+                            </div>
+                            <button type="submit" class="btn btn-primary w-100">
+                                <i class="fas fa-sign-in-alt"></i> Login
+                            </button>
+                        </form>
+                        <div class="mt-3">
+                            <small class="text-muted">
+                                Demo accounts:<br>
+                                Admin: admin@hospital.com<br>
+                                Clinician: drsmith@hospital.com<br>
+                                Nurse: nwilson@hospital.com<br>
+                                Receptionist: rbrown@hospital.com<br>
+                                Patient: jpatient@email.com<br>
+                                (Password: password123)
+                            </small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Dashboard -->
+    <div id="dashboardPage" class="page-section">
+        <div class="container-fluid">
+            <div class="row">
+                <!-- Sidebar -->
+                <div class="col-md-2 sidebar">
+                    <nav class="nav flex-column">
+                        <a class="nav-link active" href="#" data-page="api-tester">
+                            <i class="fas fa-vial"></i> API Tester
+                        </a>
+                        <a class="nav-link" href="#" data-page="roles">
+                            <i class="fas fa-user-tag"></i> Roles
+                        </a>
+                        <a class="nav-link" href="#" data-page="permissions">
+                            <i class="fas fa-key"></i> Permissions
+                        </a>
+                        <a class="nav-link" href="#" data-page="groups">
+                            <i class="fas fa-users"></i> Groups
+                        </a>
+                        <a class="nav-link" href="#" data-page="users">
+                            <i class="fas fa-user"></i> Users
+                        </a>
+                    </nav>
+                </div>
+
+                <!-- Main Content -->
+                <div class="col-md-10 main-content">
+                    <!-- User Info -->
+                    <div class="user-info" id="userInfo">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <h5 class="mb-0"><i class="fas fa-user-circle"></i> Current User</h5>
+                                <div id="userDetails">Loading...</div>
+                            </div>
+                            <button class="btn btn-sm btn-outline-secondary" onclick="logout()" title="Logout to test with different user">
+                                <i class="fas fa-sign-out-alt"></i> Logout
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- API Tester Page (Page 1) -->
+                   <!-- API Tester Page -->
+<div id="api-tester" class="page-section active">
+    <h2 class="page-title">Page 1 — API Tester</h2>
+
+    <div class="row g-3">
+        <div class="col-md-6">
+            <div class="card api-test-card">
+                <div class="card-header">
+                    Endpoint 1: Public Access
+                </div>
+                <div class="card-body">
+                    <button class="btn btn-endpoint" onclick="callAPI('public')">► Send Request</button>
+                    <div id="response-public" class="api-response"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="card api-test-card">
+                <div class="card-header">
+                    Endpoint 2: Authenticated User
+                </div>
+                <div class="card-body">
+                    <button class="btn btn-endpoint" onclick="callAPI('user_basic')">► Send Request</button>
+                    <div id="response-user_basic" class="api-response"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="card api-test-card">
+                <div class="card-header">
+                    Endpoint 3: Admin Only
+                </div>
+                <div class="card-body">
+                    <button class="btn btn-endpoint" onclick="callAPI('admin_only')">► Send Request</button>
+                    <div id="response-admin_only" class="api-response"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="card api-test-card">
+                <div class="card-header">
+                    Endpoint 4: Clinician Only
+                </div>
+                <div class="card-body">
+                    <button class="btn btn-endpoint" onclick="callAPI('clinician_only')">► Send Request</button>
+                    <div id="response-clinician_only" class="api-response"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="card api-test-card">
+                <div class="card-header">
+                    Endpoint 5: Receptionist Only
+                </div>
+                <div class="card-body">
+                    <button class="btn btn-endpoint" onclick="callAPI('receptionist_only')">► Send Request</button>
+                    <div id="response-receptionist_only" class="api-response"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="card api-test-card">
+                <div class="card-header">
+                    Endpoint 6: Nurse Only
+                </div>
+                <div class="card-body">
+                    <button class="btn btn-endpoint" onclick="callAPI('nurse_only')">► Send Request</button>
+                    <div id="response-nurse_only" class="api-response"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="card api-test-card">
+                <div class="card-header">
+                    Endpoint 7: Multi-Role Access
+                </div>
+                <div class="card-body">
+                    <button class="btn btn-endpoint" onclick="callAPI('multi_role')">► Send Request</button>
+                    <div id="response-multi_role" class="api-response"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+                    <!-- Roles Page (Page 2) -->
+                    <div id="roles" class="page-section">
+                        <h2><i class="fas fa-user-tag"></i> Page 2 — Roles</h2>
+                        <p class="text-muted mb-4">Table listing all roles in the system.</p>
+                        <div class="table-responsive">
+                            <table class="table table-striped table-hover">
+                                <thead class="table-dark">
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Name</th>
+                                        <th>Description</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="rolesTableBody">
+                                    <tr><td colspan="3" class="text-center">Loading...</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Permissions Page (Page 3) -->
+                    <div id="permissions" class="page-section">
+                        <h2><i class="fas fa-key"></i> Page 3 — Permissions</h2>
+                        <p class="text-muted mb-4">Table listing all permissions in the system.</p>
+                        <div class="table-responsive">
+                            <table class="table table-striped table-hover">
+                                <thead class="table-dark">
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Name</th>
+                                        <th>Description</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="permissionsTableBody">
+                                    <tr><td colspan="3" class="text-center">Loading...</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Groups Page (Page 4) -->
+                    <div id="groups" class="page-section">
+                        <h2><i class="fas fa-users"></i> Page 4 — Groups</h2>
+                        <p class="text-muted mb-4">List of groups. Each group can be assigned multiple permissions. Groups act as a permission bundle.</p>
+                        <div id="groupsList">
+                            <div class="text-center">Loading...</div>
+                        </div>
+                    </div>
+
+                    <!-- Users Page (Page 5) -->
+                    <div id="users" class="page-section">
+                        <h2><i class="fas fa-user"></i> Page 5 — Users</h2>
+                        <p class="text-muted mb-4">List of users. Click on a user to edit their roles, permissions, and groups.</p>
+                        <div class="table-responsive">
+                            <table class="table table-striped table-hover">
+                                <thead class="table-dark">
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Name</th>
+                                        <th>Email</th>
+                                        <th>Primary Role</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="usersTableBody">
+                                    <tr><td colspan="5" class="text-center">Loading...</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- User Edit Modal -->
+    <div class="modal fade" id="userEditModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Edit User Permissions</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div id="userEditContent">Loading...</div>
+                </div>
+                <div class="modal-footer">
+                    <small class="text-muted me-auto">Changes are saved automatically when toggles are switched.</small>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="dashboard.js"></script>
+</body>
+</html>
+
+    <style>
+        :root {
+            --primary-color: #2563eb;
+            --primary-dark: #1d4ed8;
+            --primary-light: #3b82f6;
+            --secondary-color: #64748b;
+            --success-color: #10b981;
+            --warning-color: #f59e0b;
+            --danger-color: #ef4444;
+            --info-color: #06b6d4;
+            --light-bg: #f8fafc;
+            --white: #ffffff;
+            --text-primary: #1e293b;
+            --text-secondary: #64748b;
+            --border-color: #e2e8f0;
+            --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+            --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+            --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+            --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1);
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            color: var(--text-primary);
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+        }
+
+        /* Modern color scheme */
+        .bg-primary, .bg-info, .bg-secondary {
+            background-color: var(--primary-color) !important;
+            color: var(--white) !important;
+        }
+        
+        .badge.bg-primary, .badge.bg-info, .badge.bg-secondary {
+            background-color: var(--primary-light) !important;
+            color: var(--white) !important;
+        }
+        
+        .btn-primary, .btn-info, .btn-secondary {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%) !important;
+            border: none !important;
+            color: var(--white) !important;
+            font-weight: 600;
+            padding: 10px 20px;
+            border-radius: 8px;
+            box-shadow: var(--shadow-md);
+            transition: var(--transition);
+        }
+        
+        .btn-primary:hover, .btn-info:hover, .btn-secondary:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+            background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary-color) 100%) !important;
+        }
+        
+        .card-header.text-white {
+            color: var(--text-primary) !important;
+        }
+
+        /* Enhanced sidebar */
+        .sidebar {
+            min-height: 100vh;
+            background: linear-gradient(180deg, var(--white) 0%, var(--light-bg) 100%);
+            padding: 30px 20px;
+            border-right: 1px solid var(--border-color);
+            box-shadow: var(--shadow-md);
+            position: relative;
+        }
+        
+        .sidebar::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary-color) 0%, var(--info-color) 100%);
+        }
+        
+        .sidebar .nav-link {
+            color: var(--text-primary);
+            padding: 14px 20px;
+            margin: 8px 0;
+            border-radius: 12px;
+            transition: var(--transition);
+            font-weight: 500;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .sidebar .nav-link::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 3px;
+            background: var(--primary-color);
+            transform: translateX(-100%);
+            transition: var(--transition);
+        }
+        
+        .sidebar .nav-link:hover {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-light) 100%);
+            color: var(--white);
+            transform: translateX(5px);
+            box-shadow: var(--shadow-md);
+        }
+        
+        .sidebar .nav-link:hover::before {
+            transform: translateX(0);
+        }
+        
+        .sidebar .nav-link.active {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
+            color: var(--white);
+            font-weight: 600;
+            box-shadow: var(--shadow-lg);
+        }
+        
+        .sidebar .nav-link i {
+            margin-right: 12px;
+            font-size: 16px;
+        }
+
+        .main-content {
+            padding: 30px;
+            background-color: var(--white);
+            min-height: 100vh;
+        }
+        
+        .page-section { 
+            display: none; 
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        
+        .page-section.active { 
+            display: block; 
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Enhanced cards */
+        .api-test-card {
+            margin-bottom: 24px;
+            border: none;
+            border-radius: 16px;
+            box-shadow: var(--shadow-md);
+            transition: var(--transition);
+            overflow: hidden;
+            background: var(--white);
+        }
+        
+        .api-test-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-xl);
+        }
+
+        .api-test-card .card-header {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
+            color: var(--white) !important;
+            padding: 16px 20px;
+            font-weight: 600;
+            font-size: 15px;
+            border: none;
+            position: relative;
+        }
+        
+        .api-test-card .card-header::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--info-color) 0%, var(--success-color) 100%);
+        }
+        
+        .api-test-card .card-header .badge {
+            display: none;
+        }
+        
+        .api-test-card .btn {
+            background: linear-gradient(135deg, var(--success-color) 0%, #059669 100%);
+            border: none;
+            color: var(--white);
+            font-weight: 600;
+            padding: 12px 24px;
+            border-radius: 10px;
+            transition: var(--transition);
+            box-shadow: var(--shadow-sm);
+        }
+        
+        .api-test-card .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+            background: linear-gradient(135deg, #059669 0%, var(--success-color) 100%);
+        }
+
+        /* Enhanced response area */
+        .api-response {
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+            border: 1px solid #334155;
+            border-radius: 12px;
+            padding: 20px;
+            color: #e2e8f0;
+            font-family: 'JetBrains Mono', 'Fira Code', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+            font-size: 14px;
+            margin-top: 16px;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .api-response::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, var(--primary-color) 0%, var(--info-color) 50%, var(--success-color) 100%);
+        }
+        
+        .api-response pre {
+            margin: 0;
+            color: #e2e8f0;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            line-height: 1.5;
+        }
+        
+        .api-response .status-badge {
+            display: inline-block;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 12px;
+            margin-bottom: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .api-response .status-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid #334155;
+        }
+        
+        .status-200 { 
+            background: linear-gradient(135deg, var(--success-color) 0%, #059669 100%);
+            color: var(--white); 
+            font-weight: 600;
+            box-shadow: 0 2px 4px rgba(16, 185, 129, 0.3);
+        }
+        
+        .status-401 { 
+            background: linear-gradient(135deg, var(--danger-color) 0%, #dc2626 100%);
+            color: var(--white); 
+            font-weight: 600;
+            box-shadow: 0 2px 4px rgba(239, 68, 68, 0.3);
+        }
+        
+        .status-403 { 
+            background: linear-gradient(135deg, var(--warning-color) 0%, #d97706 100%);
+            color: var(--white); 
+            font-weight: 600;
+            box-shadow: 0 2px 4px rgba(245, 158, 11, 0.3);
+        }
+        
+        .status-404 { 
+            background: linear-gradient(135deg, var(--secondary-color) 0%, #475569 100%);
+            color: var(--white); 
+            font-weight: 600;
+            box-shadow: 0 2px 4px rgba(100, 116, 139, 0.3);
+        }
+        
+        .status-500 { 
+            background: linear-gradient(135deg, var(--danger-color) 0%, #dc2626 100%);
+            color: var(--white); 
+            font-weight: 600;
+            box-shadow: 0 2px 4px rgba(239, 68, 68, 0.3);
+        }
+
+        /* Enhanced user info */
+        .user-info {
+            background: linear-gradient(135deg, var(--white) 0%, var(--light-bg) 100%);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 30px;
+            box-shadow: var(--shadow-md);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .user-info::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary-color) 0%, var(--info-color) 50%, var(--success-color) 100%);
+        }
+        
+        .form-switch {
+            margin-bottom: 12px;
+        }
+        
+        .table-responsive {
+            margin-top: 24px;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: var(--shadow-md);
+        }
+        
+        .table-responsive table {
+            margin: 0;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+        
+        .table-responsive thead {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
+            color: var(--white);
+        }
+        
+        .table-responsive th {
+            border: none;
+            padding: 16px;
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 12px;
+            letter-spacing: 0.5px;
+        }
+        
+        .table-responsive td {
+            border: none;
+            padding: 16px;
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .table-responsive tbody tr:hover {
+            background-color: var(--light-bg);
+        }
+        
+        .login-container {
+            max-width: 450px;
+            margin: 120px auto;
+        }
+        
+        .login-card {
+            border: none;
+            border-radius: 20px;
+            box-shadow: var(--shadow-xl);
+            overflow: hidden;
+            background: var(--white);
+        }
+        
+        .login-card .card-header {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
+            color: var(--white);
+            padding: 30px;
+            border: none;
+            text-align: center;
+        }
+        
+        .login-card .card-body {
+            padding: 40px 30px;
+        }
+        
+        .login-card .form-control {
+            border: 2px solid var(--border-color);
+            border-radius: 10px;
+            padding: 12px 16px;
+            font-size: 15px;
+            transition: var(--transition);
+        }
+        
+        .login-card .form-control:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+        
+        .login-card .btn-primary {
+            width: 100%;
+            padding: 14px;
+            font-size: 16px;
+            margin-top: 10px;
+        }
+        
+        /* Page titles */
+        .page-title {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+            position: relative;
+            padding-bottom: 16px;
+        }
+        
+        .page-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 60px;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary-color) 0%, var(--info-color) 100%);
+            border-radius: 2px;
+        }
+        
+        /* Responsive improvements */
+        @media (max-width: 768px) {
+            .sidebar {
+                padding: 20px 15px;
+            }
+            
+            .main-content {
+                padding: 20px 15px;
+            }
+            
+            .login-container {
+                margin: 60px 15px;
+                max-width: none;
+            }
+        }
+    </style>
+</head>
+
+    <style>
+        /* Palette neutre */
+        .bg-primary, .bg-info, .bg-secondary {
+            background-color: #e9ecef !important;
+            color: #212529 !important;
+        }
+        .badge.bg-primary, .badge.bg-info, .badge.bg-secondary {
+            background-color: #e0e0e0 !important;
+            color: #212529 !important;
+        }
+        .btn-primary, .btn-info, .btn-secondary {
+            background-color: #6c757d !important;
+            border-color: #6c757d !important;
+            color: #ffffff !important;
+        }
+        .card-header.text-white {
+            color: #212529 !important;
+        }
+        /* Sidebar simplifiée */
+        .sidebar {
+            min-height: 100vh;
+            background-color: #3a4a5c;
+            padding-top: 20px;
+            border-right: 1px solid #2f3c48;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+        }
+        .sidebar .nav-link {
+            color: #ffffff;
+            padding: 12px 18px;
+            margin: 6px 0;
+            border-radius: 6px;
+            transition: background-color 0.15s ease;
+        }
+        .sidebar .nav-link i {
+            color: #ffffff;
+            margin-right: 8px;
+        }
+        .sidebar .nav-link:hover {
+            background-color: #334455;
+            color: #ffffff;
+        }
+        .sidebar .nav-link.active {
+            background-color: #2f3c48;
+            color: #ffffff;
+            font-weight: 600;
+        }
+
+        /* Carte d’info utilisateur */
+        .user-info {
+            background-color: #e3f2fd;
+            border: 1px solid #d5e7fb;
+            border-radius: 8px;
+            padding: 14px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+        }
+
+        /* Titre de page */
+        .main-content {
+            padding: 20px;
+            background-color: #ffffff;
+        }
+        .page-title {
+            font-family: "Segoe UI", Arial, sans-serif;
+            text-transform: uppercase;
+            letter-spacing: .4px;
+            font-weight: 600;
+            color: #111111;
+            margin: 8px 0 16px 0;
+            padding-bottom: 8px;
+            border-bottom: 3px solid #000000;
+        }
+
+        /* Grille endpoints 2×2 strict avec `gap: 20px`, conteneur centré et limité, et cartes visibles/claires avec hauteur uniforme. Aucun margin/padding externe sur les cadres; l’espacement est géré uniquement par le `gap`. Le contenu défile à l’intérieur du cadre pour conserver la même hauteur, même si le contenu varie. */
+        #api-tester {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 10px;
+        }
+
+        /* Grille endpoints 2×2 stricte avec gap: 10px (1 colonne en mobile) */
+        #api-tester .row {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 10px;
+            grid-auto-rows: minmax(180px, auto);
+            align-items: stretch;
+        }
+        /* Supprime l’enveloppe bootstrap pour que la carte soit l’item de grille */
+        #api-tester .row > [class*="col-"] {
+            display: contents;        /* la .card devient l’élément du grid */
+            margin: 0 !important;
+            padding: 0 !important;
+        }
+        @media (max-width: 768px) {
+            #api-tester .row { grid-template-columns: 1fr; }
+        }
+
+        /* Cartes visibles, claires, et uniformes (remplissent la cellule de grille) */
+        .api-test-card {
+            height: 100%;             /* remplis la cellule (300px) */
+            box-sizing: border-box;
+            background: #ffffff;
+            border: 1px solid #e1e4e8;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;         /* le scroll se fait dans .card-body */
+        }
+        .api-test-card .card-header {
+            background-color: #f8f9fa;
+            color: #111111;
+            padding: 12px 14px;
+            border-bottom: 1px solid #e1e4e8;
+        }
+        .api-test-card .card-body {
+            flex: 1;                  /* occupe la hauteur restante */
+            overflow-y: auto;         /* contenu scrollable si dépasse */
+            background-color: #ffffff;
+            color: #111111;
+            padding: 12px 14px;       /* padding interne pour la clarté */
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        /* Bouton "Send Request" (plein largeur, contraste) */
+        .btn-endpoint {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            height: 40px;
+            background-color: #000000 !important;
+            border-color: #000000 !important;
+            color: #ffffff !important;
+            font-weight: 700;
+            border-radius: 6px;
+        }
+        .btn-endpoint:hover {
+            background-color: #1a1a1a !important;
+            border-color: #1a1a1a !important;
+        }
+
+        /* Zone de réponse sombre (s'adapte au contenu) */
+        .api-response {
+            background-color: #1e1e1e;
+            color: #e5e7eb;
+            border: 1px solid #333333;
+            border-radius: 6px;
+            padding: 8px;
+            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Courier New", monospace;
+            font-size: 14px;
+            min-height: 60px;        /* hauteur minimum */
+        }
+        .api-response pre {
+            margin: 0;
+            color: #e5e7eb;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+
+        /* Badges de statut (si utilisés par le JS) */
+        .status-200 { background-color: #28a745 !important; color: #ffffff !important; font-weight: 700; }
+        .status-401, .status-403 { background-color: #dc3545 !important; color: #ffffff !important; font-weight: 700; }
+        .status-404, .status-500 { background-color: #6c757d !important; color: #ffffff !important; font-weight: 700; }
+    </style>
+</head>

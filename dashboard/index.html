@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hospital RBAC Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+            background-color: #f8f9fa;
+            color: #333;
+            margin: 0;
+            padding: 0;
+            line-height: 1.5;
+        }
+
+        .sidebar {
+            min-height: 100vh;
+            background-color: #fff;
+            padding: 20px;
+            border-right: 1px solid #dee2e6;
+        }
+        
+        .sidebar .nav-link {
+            color: #495057;
+            padding: 10px 15px;
+            margin: 5px 0;
+            border-radius: 5px;
+            transition: background-color 0.2s;
+        }
+        
+        .sidebar .nav-link:hover {
+            background-color: #007bff;
+            color: #fff;
+        }
+        
+        .sidebar .nav-link.active {
+            background-color: #007bff;
+            color: #fff;
+        }
+        
+        .sidebar .nav-link i {
+            margin-right: 10px;
+        }
+
+        .main-content {
+            padding: 30px;
+            background-color: #fff;
+            min-height: 100vh;
+        }
+        
+        .page-section { 
+            display: none; 
+        }
+        
+        .page-section.active { 
+            display: block; 
+        }
+
+        .api-test-card {
+            margin-bottom: 20px;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+        }
+
+        .api-test-card .card-header {
+            background-color: #f8f9fa;
+            border-bottom: 1px solid #dee2e6;
+            font-weight: 600;
+        }
+        
+        .api-test-card .card-header .badge {
+            display: none;
+        }
+        
+        .api-test-card .btn {
+            background-color: #28a745;
+            border-color: #28a745;
+            color: #fff;
+        }
+        
+        .api-test-card .btn:hover {
+            background-color: #218838;
+            border-color: #1e7e34;
+        }
+
+        .api-response {
+            background-color: #2d3748;
+            border: 1px solid #4a5568;
+            border-radius: 5px;
+            padding: 15px;
+            color: #e2e8f0;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            margin-top: 10px;
+        }
+        
+        .api-response pre {
+            margin: 0;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+        
+        .api-response .status-badge {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-weight: 600;
+            font-size: 12px;
+            margin-bottom: 8px;
+        }
+        
+        .status-200 { background-color: #28a745; color: #fff; }
+        .status-401 { background-color: #dc3545; color: #fff; }
+        .status-403 { background-color: #ffc107; color: #212529; }
+        .status-404 { background-color: #6c757d; color: #fff; }
+        .status-500 { background-color: #dc3545; color: #fff; }
+
+        .user-info {
+            background-color: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .form-switch {
+            margin-bottom: 10px;
+        }
+        
+        .table-responsive {
+            margin-top: 20px;
+        }
+        
+        .table-responsive thead {
+            background-color: #f8f9fa;
+        }
+        
+        .login-container {
+            max-width: 450px;
+            margin: 120px auto;
+        }
+        
+        .login-card {
+            border: none;
+            border-radius: 20px;
+            box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1);
+            overflow: hidden;
+            background: #ffffff;
+            position: relative;
+        }
+        
+        .login-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #2563eb 0%, #06b6d4 50%, #10b981 100%);
+        }
+        
+        .login-card .card-header {
+            background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+            color: #fff;
+            padding: 30px;
+            border: none;
+            text-align: center;
+            position: relative;
+        }
+        
+        .login-card .card-header h4 {
+            font-size: 24px;
+            font-weight: 700;
+            margin: 0;
+        }
+        
+        .login-card .card-body {
+            padding: 40px 30px;
+        }
+        
+        .login-card .form-label {
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 8px;
+        }
+        
+        .login-card .form-control {
+            border: 2px solid #e5e7eb;
+            border-radius: 10px;
+            padding: 12px 16px;
+            font-size: 15px;
+            transition: all 0.3s ease;
+            background-color: #f9fafb;
+        }
+        
+        .login-card .form-control:focus {
+            border-color: #2563eb;
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+            background-color: #ffffff;
+        }
+        
+        .login-card .btn-primary {
+            width: 100%;
+            padding: 14px;
+            font-size: 16px;
+            margin-top: 10px;
+            background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+            border: none;
+            border-radius: 10px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+        }
+        
+        .login-card .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+            background: linear-gradient(135deg, #1d4ed8 0%, #2563eb 100%);
+        }
+        
+        .login-card .btn-primary:active {
+            transform: translateY(0);
+        }
+        
+        .demo-accounts {
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            border-radius: 10px;
+            padding: 15px;
+            margin-top: 20px;
+            border: 1px solid #e2e8f0;
+        }
+        
+        .demo-accounts small {
+            color: #64748b !important;
+            line-height: 1.5;
+        }
+        
+        h2 {
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <!-- Login Page -->
+    <div id="loginPage" class="page-section active">
+        <div class="container">
+            <div class="login-container">
+                <div class="card login-card">
+                    <div class="card-header bg-primary text-white">
+                        <h4 class="mb-0"><i class="fas fa-hospital"></i> Hospital RBAC Dashboard</h4>
+                    </div>
+                    <div class="card-body">
+                        <form id="loginForm">
+                            <div class="mb-3">
+                                <label for="email" class="form-label">Email</label>
+                                <input type="email" class="form-control" id="email" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="password" class="form-label">Password</label>
+                                <input type="password" class="form-control" id="password" required>
+                            </div>
+                            <button type="submit" class="btn btn-primary w-100">
+                                <i class="fas fa-sign-in-alt"></i> Login
+                            </button>
+                        </form>
+                        <div class="demo-accounts">
+                            <small>
+                                Demo accounts:<br>
+                                Admin: admin@hospital.com<br>
+                                Clinician: drsmith@hospital.com<br>
+                                Nurse: nwilson@hospital.com<br>
+                                Receptionist: rbrown@hospital.com<br>
+                                Patient: jpatient@email.com<br>
+                                (Password: password123)
+                            </small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Dashboard -->
+    <div id="dashboardPage" class="page-section">
+        <div class="container-fluid">
+            <div class="row">
+                <!-- Sidebar -->
+                <div class="col-md-2 sidebar">
+                    <nav class="nav flex-column">
+                        <a class="nav-link active" href="#" data-page="api-tester">
+                            <i class="fas fa-vial"></i> API Tester
+                        </a>
+                        <a class="nav-link" href="#" data-page="roles">
+                            <i class="fas fa-user-tag"></i> Roles
+                        </a>
+                        <a class="nav-link" href="#" data-page="permissions">
+                            <i class="fas fa-key"></i> Permissions
+                        </a>
+                        <a class="nav-link" href="#" data-page="groups">
+                            <i class="fas fa-users"></i> Groups
+                        </a>
+                        <a class="nav-link" href="#" data-page="users">
+                            <i class="fas fa-user"></i> Users
+                        </a>
+                    </nav>
+                </div>
+
+                <!-- Main Content -->
+                <div class="col-md-10 main-content">
+                    <!-- User Info -->
+                    <div class="user-info" id="userInfo">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <h5 class="mb-0"><i class="fas fa-user-circle"></i> Current User</h5>
+                                <div id="userDetails">Loading...</div>
+                            </div>
+                            <button class="btn btn-sm btn-outline-secondary" onclick="logout()" title="Logout to test with different user">
+                                <i class="fas fa-sign-out-alt"></i> Logout
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- API Tester Page (Page 1) -->
+                   <!-- API Tester Page -->
+<div id="api-tester" class="page-section active">
+    <h2 class="page-title">Page 1 — API Tester</h2>
+
+    <div class="row g-3">
+        <div class="col-md-6">
+            <div class="card api-test-card">
+                <div class="card-header">
+                    Endpoint 1: Public Access
+                </div>
+                <div class="card-body">
+                    <button class="btn btn-endpoint" onclick="callAPI('public')">► Send Request</button>
+                    <div id="response-public" class="api-response"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="card api-test-card">
+                <div class="card-header">
+                    Endpoint 2: Authenticated User
+                </div>
+                <div class="card-body">
+                    <button class="btn btn-endpoint" onclick="callAPI('user_basic')">► Send Request</button>
+                    <div id="response-user_basic" class="api-response"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="card api-test-card">
+                <div class="card-header">
+                    Endpoint 3: Admin Only
+                </div>
+                <div class="card-body">
+                    <button class="btn btn-endpoint" onclick="callAPI('admin_only')">► Send Request</button>
+                    <div id="response-admin_only" class="api-response"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="card api-test-card">
+                <div class="card-header">
+                    Endpoint 4: Clinician Only
+                </div>
+                <div class="card-body">
+                    <button class="btn btn-endpoint" onclick="callAPI('clinician_only')">► Send Request</button>
+                    <div id="response-clinician_only" class="api-response"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="card api-test-card">
+                <div class="card-header">
+                    Endpoint 5: Receptionist Only
+                </div>
+                <div class="card-body">
+                    <button class="btn btn-endpoint" onclick="callAPI('receptionist_only')">► Send Request</button>
+                    <div id="response-receptionist_only" class="api-response"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="card api-test-card">
+                <div class="card-header">
+                    Endpoint 6: Nurse Only
+                </div>
+                <div class="card-body">
+                    <button class="btn btn-endpoint" onclick="callAPI('nurse_only')">► Send Request</button>
+                    <div id="response-nurse_only" class="api-response"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="card api-test-card">
+                <div class="card-header">
+                    Endpoint 7: Multi-Role Access
+                </div>
+                <div class="card-body">
+                    <button class="btn btn-endpoint" onclick="callAPI('multi_role')">► Send Request</button>
+                    <div id="response-multi_role" class="api-response"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+                    <!-- Roles Page (Page 2) -->
+                    <div id="roles" class="page-section">
+                        <h2><i class="fas fa-user-tag"></i> Page 2 — Roles</h2>
+                        <p class="text-muted mb-4">Table listing all roles in the system.</p>
+                        <div class="table-responsive">
+                            <table class="table table-striped table-hover">
+                                <thead class="table-dark">
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Name</th>
+                                        <th>Description</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="rolesTableBody">
+                                    <tr><td colspan="3" class="text-center">Loading...</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Permissions Page (Page 3) -->
+                    <div id="permissions" class="page-section">
+                        <h2><i class="fas fa-key"></i> Page 3 — Permissions</h2>
+                        <p class="text-muted mb-4">Table listing all permissions in the system.</p>
+                        <div class="table-responsive">
+                            <table class="table table-striped table-hover">
+                                <thead class="table-dark">
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Name</th>
+                                        <th>Description</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="permissionsTableBody">
+                                    <tr><td colspan="3" class="text-center">Loading...</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Groups Page (Page 4) -->
+                    <div id="groups" class="page-section">
+                        <h2><i class="fas fa-users"></i> Page 4 — Groups</h2>
+                        <p class="text-muted mb-4">List of groups. Each group can be assigned multiple permissions. Groups act as a permission bundle.</p>
+                        <div id="groupsList">
+                            <div class="text-center">Loading...</div>
+                        </div>
+                    </div>
+
+                    <!-- Users Page (Page 5) -->
+                    <div id="users" class="page-section">
+                        <h2><i class="fas fa-user"></i> Page 5 — Users</h2>
+                        <p class="text-muted mb-4">List of users. Click on a user to edit their roles, permissions, and groups.</p>
+                        <div class="table-responsive">
+                            <table class="table table-striped table-hover">
+                                <thead class="table-dark">
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Name</th>
+                                        <th>Email</th>
+                                        <th>Primary Role</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="usersTableBody">
+                                    <tr><td colspan="5" class="text-center">Loading...</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- User Edit Modal -->
+    <div class="modal fade" id="userEditModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Edit User Permissions</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div id="userEditContent">Loading...</div>
+                </div>
+                <div class="modal-footer">
+                    <small class="text-muted me-auto">Changes are saved automatically when toggles are switched.</small>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="dashboard.js"></script>
+</body>
+</html>
